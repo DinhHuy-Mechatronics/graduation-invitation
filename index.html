@@ -1,0 +1,1308 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Thiệp Mời Lễ Tốt Nghiệp — Bách Khoa ĐHQG-HCM</title>
+
+  <!-- Google Fonts chuẩn tiếng Việt & Typography sang trọng (100% Native Vietnamese) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap"
+    rel="stylesheet">
+
+  <!-- Thư viện pháo hoa ăn mừng khi mở thiệp -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-winter: #060d1a;
+      --twilight-deep: #0a1426;
+      --twilight-card: rgba(10, 20, 38, 0.46);
+      --gold-primary: #dfb358;
+      --gold-light: #fae6b2;
+      --gold-bright: #fff4d6;
+      --gold-dark: #91681a;
+      --gold-gradient: linear-gradient(135deg, #fff5d9 0%, #dfb358 45%, #9b7222 100%);
+      --snow-white: #ffffff;
+      --text-main: #f2f6fc;
+      --text-muted: rgba(215, 228, 248, 0.82);
+      --glass-border: rgba(223, 179, 88, 0.35);
+      --card-shadow: 0 25px 75px rgba(0, 0, 0, 0.7), 0 0 45px rgba(223, 179, 88, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-winter);
+      color: var(--text-main);
+      font-family: 'Be Vietnam Pro', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* ========================================================
+       CANVAS HIỆU ỨNG TUYẾT RƠI & BỤI SAO GIÁNG SINH LUNG LINH
+       ======================================================== */
+    #snowCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* BACKGROUND RÕ NÉT CẢNH TRƯỜNG, LÀM TỐI & LẮNG ĐỌNG NHẸ */
+    .bg-custom-layer {
+      position: fixed;
+      inset: 0;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center 25%;
+      background-repeat: no-repeat;
+      opacity: 0.88;
+      filter: brightness(0.52) contrast(1.08);
+      /* Làm tối và lắng dịu, KHÔNG làm mờ nhòe */
+      z-index: 1;
+      pointer-events: none;
+      transition: opacity 1s ease;
+    }
+
+    .bg-winter-gradient {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(6, 12, 24, 0.18) 0%, rgba(3, 6, 14, 0.58) 75%, rgba(2, 4, 8, 0.82) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ĐÈN LED FAIRY LIGHTS GIÁNG SINH TRÊN CÙNG MÀN HÌNH */
+    .fairy-lights {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 18px;
+      z-index: 4;
+      display: flex;
+      justify-content: space-around;
+      pointer-events: none;
+      padding: 0 10px;
+    }
+
+    .light-bulb {
+      width: 10px;
+      height: 14px;
+      border-radius: 50% 50% 45% 45%;
+      margin: 0 4px;
+      animation: glowLight 2s infinite alternate ease-in-out;
+    }
+
+    .light-bulb:nth-child(3n+1) {
+      background: #ffd778;
+      box-shadow: 0 0 14px #ffd778;
+      animation-delay: 0s;
+    }
+
+    .light-bulb:nth-child(3n+2) {
+      background: #7ee0ff;
+      box-shadow: 0 0 14px #7ee0ff;
+      animation-delay: 0.7s;
+    }
+
+    .light-bulb:nth-child(3n) {
+      background: #ff7b90;
+      box-shadow: 0 0 14px #ff7b90;
+      animation-delay: 1.4s;
+    }
+
+    @keyframes glowLight {
+      0% {
+        opacity: 0.35;
+        transform: scale(0.85);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+
+    /* ========================================================
+       NÚT PHÁT NHẠC ĐĨA THAN GÓC MÀN HÌNH
+       ======================================================== */
+    .music-player-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px 10px 12px;
+      background: rgba(12, 22, 42, 0.92);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(14px);
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(223, 179, 88, 0.25);
+      transition: all 0.3s ease;
+    }
+
+    .music-player-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold-light);
+      box-shadow: 0 10px 35px rgba(212, 167, 74, 0.4);
+    }
+
+    .vinyl-disc {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #2b2b2b 30%, #111111 70%);
+      border: 2px solid var(--gold-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .vinyl-disc::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--gold-light);
+      border-radius: 50%;
+    }
+
+    .vinyl-disc.spinning {
+      animation: spinVinyl 3.6s linear infinite;
+    }
+
+    @keyframes spinVinyl {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .music-text {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--gold-light);
+      letter-spacing: 0.5px;
+    }
+
+    /* ========================================================
+       MÀN HÌNH 1: PHONG BÌ THƯ MÙA ĐÔNG NIÊM PHONG SÁP VÀNG
+       ======================================================== */
+    #envelopeScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(circle at 50% 30%, rgba(8, 16, 32, 0.28) 0%, rgba(4, 8, 18, 0.58) 85%);
+      backdrop-filter: blur(2px);
+      transition: opacity 0.9s cubic-bezier(0.65, 0, 0.35, 1), transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    #envelopeScreen.opened {
+      opacity: 0;
+      transform: scale(1.08);
+      pointer-events: none;
+    }
+
+    .envelope-container {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .envelope-winter-badge {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .envelope-title {
+      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 2.7rem;
+      color: var(--gold-light);
+      text-shadow: 0 0 25px rgba(212, 167, 74, 0.45);
+      margin-bottom: 6px;
+      line-height: 1.15;
+      letter-spacing: 0.5px;
+    }
+
+    .envelope-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
+
+    /* HỘP PHONG BÌ SANG TRỌNG */
+    .envelope-card-box {
+      width: 100%;
+      background: linear-gradient(155deg, rgba(16, 30, 58, 0.48), rgba(8, 14, 28, 0.58));
+      border: 1.5px solid var(--gold-primary);
+      border-radius: 20px;
+      padding: 34px 26px 28px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.75), 0 0 45px rgba(223, 179, 88, 0.2);
+      position: relative;
+      margin-bottom: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .envelope-card-box::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px dashed rgba(212, 167, 74, 0.35);
+      border-radius: 14px;
+      pointer-events: none;
+    }
+
+    /* Con dấu sáp hoàng gia */
+    .wax-seal {
+      width: 72px;
+      height: 72px;
+      margin: -68px auto 16px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff0c7, #c49339 60%, #754f10 100%);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 167, 74, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .wax-seal:hover {
+      transform: scale(1.1) rotate(6deg);
+    }
+
+    .wax-seal svg {
+      width: 38px;
+      height: 38px;
+      fill: #3b2804;
+    }
+
+    .recipient-tag {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      color: var(--gold-primary);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .recipient-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      line-height: 1.3;
+    }
+
+    .recipient-note {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    .btn-open-wax {
+      width: 100%;
+      padding: 15px;
+      border-radius: 14px;
+      background: var(--gold-gradient);
+      color: #0b1120;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.96rem;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(212, 167, 74, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-open-wax:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(212, 167, 74, 0.6);
+      filter: brightness(1.08);
+    }
+
+    /* ========================================================
+       MÀN HÌNH 2: NỘI DUNG THIỆP MÙA ĐÔNG HOÀNG GIA (MAIN LETTER)
+       ======================================================== */
+    #mainInvitation {
+      position: relative;
+      z-index: 10;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 50px 20px 120px;
+      display: none;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    #mainInvitation.visible {
+      display: block;
+      opacity: 1;
+    }
+
+    .hero-card {
+      background: rgba(10, 20, 38, 0.44);
+      backdrop-filter: blur(14px);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 26px;
+      padding: 56px 48px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    @media (max-width: 600px) {
+      .hero-card {
+        padding: 40px 20px;
+      }
+    }
+
+    .hero-inner-border {
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(212, 167, 74, 0.22);
+      border-radius: 18px;
+      pointer-events: none;
+    }
+
+    /* Họa tiết hoa tuyết mạ vàng 4 góc */
+    .snowflake-corner {
+      position: absolute;
+      font-size: 1.4rem;
+      color: rgba(212, 167, 74, 0.35);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .sc-tl {
+      top: 22px;
+      left: 24px;
+    }
+
+    .sc-tr {
+      top: 22px;
+      right: 24px;
+    }
+
+    .sc-bl {
+      bottom: 22px;
+      left: 24px;
+    }
+
+    .sc-br {
+      bottom: 22px;
+      right: 24px;
+    }
+
+    /* HUY HIỆU BÁCH KHOA CƠ ĐIỆN TỬ */
+    .crest-wrapper {
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .crest-svg {
+      width: 68px;
+      height: 68px;
+      filter: drop-shadow(0 0 16px rgba(212, 167, 74, 0.5));
+    }
+
+    .school-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.12rem;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .department-name {
+      font-size: 0.82rem;
+      letter-spacing: 1.8px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 5px;
+      font-weight: 500;
+    }
+
+    .divider-star-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 22px auto;
+      width: 60%;
+    }
+
+    .divider-star-row .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212, 167, 74, 0.4), transparent);
+    }
+
+    .divider-star-row span {
+      color: var(--gold-primary);
+      font-size: 0.95rem;
+    }
+
+    /* KHUNG XƯNG HÔ ĐÍCH DANH KHÁCH */
+    .guest-salute-box {
+      background: rgba(212, 167, 74, 0.08);
+      border: 1px solid rgba(212, 167, 74, 0.3);
+      border-radius: 18px;
+      padding: 24px 26px;
+      margin: 26px 0 34px;
+    }
+
+    .salute-intro {
+      font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 2.3rem;
+      color: var(--gold-light);
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+
+    .salute-guest-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 8px 0;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    .salute-degree-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .salute-degree-sub strong {
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    /* TIÊU ĐỀ LỄ TỐT NGHIỆP */
+    .ceremony-title-wrap {
+      margin-bottom: 28px;
+    }
+
+    .ceremony-title-wrap h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.9rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.18;
+      filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.5));
+    }
+
+    @media (max-width: 600px) {
+      .ceremony-title-wrap h1 {
+        font-size: 2rem;
+      }
+    }
+
+    .ceremony-title-wrap .sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-style: italic;
+      color: var(--gold-light);
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
+
+    /* BỨC THƯ TÂM SỰ MÙA ĐÔNG ĐẦY CẢM XÚC */
+    .emotional-letter {
+      text-align: left;
+      font-size: 1.02rem;
+      line-height: 1.9;
+      color: rgba(242, 246, 252, 0.94);
+      background: rgba(6, 14, 28, 0.42);
+      backdrop-filter: blur(8px);
+      border-left: 3.5px solid var(--gold-primary);
+      padding: 26px 30px;
+      border-radius: 0 18px 18px 0;
+      margin: 34px 0;
+      font-weight: 300;
+    }
+
+    .emotional-letter p {
+      margin-bottom: 14px;
+    }
+
+    .emotional-letter p:last-child {
+      margin-bottom: 0;
+    }
+
+    .emotional-letter .hl {
+      color: var(--gold-light);
+      font-weight: 500;
+    }
+
+    /* ========================================================
+       ĐỒNG HỒ ĐẾM NGƯỢC
+       ======================================================== */
+    .countdown-block {
+      margin: 36px 0 20px;
+    }
+
+    .countdown-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .countdown-item {
+      background: rgba(212, 167, 74, 0.08);
+      border: 1px solid rgba(212, 167, 74, 0.3);
+      border-radius: 12px;
+      padding: 12px 6px;
+    }
+
+    .countdown-val {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    .countdown-unit {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 5px;
+    }
+
+    /* ========================================================
+       THẺ THÔNG TIN SỰ KIỆN (THỜI GIAN & ĐỊA ĐIỂM)
+       ======================================================== */
+    .event-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 36px 0;
+      text-align: left;
+    }
+
+    @media (max-width: 650px) {
+      .event-info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .info-card {
+      background: rgba(8, 16, 34, 0.45);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .info-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold-light);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(212, 167, 74, 0.12);
+      border: 1px solid rgba(212, 167, 74, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--gold-light);
+      fill: none;
+      stroke-width: 1.8;
+    }
+
+    .card-tag {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    .card-bold {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    .card-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    .card-btn-action {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--gold-primary);
+      padding-bottom: 2px;
+      align-self: flex-start;
+      transition: all 0.2s;
+    }
+
+    .card-btn-action:hover {
+      color: #ffffff;
+      border-color: #ffffff;
+    }
+
+    /* FOOTER */
+    .invitation-footer {
+      border-top: 1px solid var(--glass-border);
+      padding-top: 24px;
+      margin-top: 36px;
+    }
+
+    .footer-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--gold-light);
+      line-height: 1.6;
+    }
+
+    .footer-badge {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ĐÈN FAIRY LIGHTS GIÁNG SINH -->
+  <div class="fairy-lights">
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+    <div class="light-bulb"></div>
+  </div>
+
+  <!-- NỀN ẢNH VÀ HIỆU ỨNG TUYẾT RƠI -->
+  <div class="bg-custom-layer" id="bgCustomLayer"></div>
+  <div class="bg-winter-gradient"></div>
+  <canvas id="snowCanvas"></canvas>
+
+  <!-- NÚT PHÁT NHẠC ĐĨA THAN -->
+  <div class="music-player-btn" id="musicToggleBtn" onclick="toggleMusic()">
+    <div class="vinyl-disc" id="vinylDisc"></div>
+    <span class="music-text" id="musicLabel">Mùa Đông — Erik</span>
+  </div>
+
+  <!-- AUDIO ELEMENT -->
+  <audio id="bgmAudio" loop preload="auto" autoplay muted playsinline>
+    <source src="Mùa Đông Erik ST.319 random piano cover.mp3" type="audio/mpeg">
+  </audio>
+
+
+  <!-- ========================================================
+       MÀN HÌNH 1: PHONG BÌ THƯ KHẮC TÊN KHÁCH MỜI
+       ======================================================== -->
+  <section id="envelopeScreen">
+    <div class="envelope-container">
+      <div class="envelope-winter-badge">
+        <span>❄️</span> LỄ TỐT NGHIỆP ĐẠI HỌC BÁCH KHOA <span>❄️</span>
+      </div>
+      <div class="envelope-title">Thanh Xuân & Mùa Đông</div>
+      <p class="envelope-subtitle">
+        4 năm dưới mái trường Bách Khoa sắp khép lại.<br>
+        Có một bức thư chân thành đang đợi bạn mở ra.
+      </p>
+
+      <div class="envelope-card-box">
+        <!-- Con dấu sáp vàng chạm nổi -->
+        <div class="wax-seal" onclick="openInvitationLetter()">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 3 1.5 8 12 13 22.5 8 12 3Zm-6.2 7.1v4.3c0 1.7 2.8 3.1 6.2 3.1s6.2-1.4 6.2-3.1v-4.3L12 12.5l-6.2-2.4ZM21.2 8.7v6.1h-1.4V9.4l-1.3.6v4.8h1.3v2.7h2.7v-2.7h-.7V9.1l-.6-.4Z" />
+          </svg>
+        </div>
+
+        <div class="recipient-tag">Bức thư trân quý gửi đến</div>
+        <div class="recipient-name" id="envelopeGuestName">Người Bạn Trân Quý</div>
+        <div class="recipient-note">
+          Chạm vào con dấu sáp vàng bên trên hoặc nút bên dưới để mở thiệp mời.
+        </div>
+
+        <button class="btn-open-wax" onclick="openInvitationLetter()">
+          <span>✉️</span> MỞ THIỆP MỜI
+        </button>
+      </div>
+
+      <div style="font-size: 0.78rem; color: var(--text-muted); letter-spacing: 1.5px;">
+        HCMUT • KHOA CƠ KHÍ • KỸ THUẬT CƠ ĐIỆN TỬ
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================
+       MÀN HÌNH 2: NỘI DUNG THIỆP MỜI CHÍNH CỦA KHÁCH
+       ======================================================== -->
+  <main id="mainInvitation">
+
+    <div class="hero-card">
+      <div class="hero-inner-border"></div>
+
+      <!-- 4 bông tuyết trang trí góc -->
+      <div class="snowflake-corner sc-tl">❄</div>
+      <div class="snowflake-corner sc-tr">❄</div>
+      <div class="snowflake-corner sc-bl">❄</div>
+      <div class="snowflake-corner sc-br">❄</div>
+
+      <!-- HUY HIỆU BÁCH KHOA CƠ ĐIỆN TỬ -->
+      <div class="crest-wrapper">
+        <svg class="crest-svg" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="crestGold" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fff2cf" />
+              <stop offset="50%" stop-color="#d4a74a" />
+              <stop offset="100%" stop-color="#8c6014" />
+            </linearGradient>
+          </defs>
+          <path d="M50 19 10 39 50 59 90 39 50 19Z" fill="url(#crestGold)" />
+          <path d="M50 23 17 39 50 55 83 39 50 23Z" fill="none" stroke="#fff2cf" stroke-width="1.5" opacity="0.75" />
+          <path d="M23 46v14c0 10 12 18 27 18s27-8 27-18V46l-27 13-27-13Z" fill="#b88a32" opacity="0.95" />
+          <path d="M27 49v10c0 8 10 15 23 15s23-7 23-15V49l-23 11-23-11Z" fill="url(#crestGold)" />
+          <path d="M82 39v29" stroke="#fae4a8" stroke-width="2.5" stroke-linecap="round" />
+          <circle cx="82" cy="70" r="4.5" fill="#d4a74a" />
+          <circle cx="82" cy="70" r="1.8" fill="#fff2cf" />
+        </svg>
+      </div>
+
+      <div class="school-name">Trường Đại Học Bách Khoa — ĐHQG-HCM</div>
+      <div class="department-name">Khoa Cơ Khí &nbsp;•&nbsp; Ngành Kỹ Thuật Cơ Điện Tử</div>
+
+      <div class="divider-star-row">
+        <div class="line"></div>
+        <span>✦ &nbsp; ❄ &nbsp; ✦</span>
+        <div class="line"></div>
+      </div>
+
+      <!-- KHUNG XƯNG HÔ ĐÍCH DANH -->
+      <div class="guest-salute-box">
+        <div class="salute-intro">Trân trọng kính mời</div>
+        <div class="salute-guest-name" id="mainGuestName">Bạn Của Mình</div>
+        <div class="salute-degree-sub">
+          Đến chung vui cùng <strong>Tân Cử Nhân</strong> trong ngày lễ tốt nghiệp đại học chính quy
+        </div>
+      </div>
+
+      <!-- TIÊU ĐỀ LỄ TỐT NGHIỆP -->
+      <div class="ceremony-title-wrap">
+        <h1>LỄ TỐT NGHIỆP</h1>
+        <div class="sub">Cử Nhân Cơ Điện Tử • Khóa 2022 — 2026</div>
+      </div>
+
+      <!-- BỨC THƯ BỘC BẠCH TÂM SỰ MÙA ĐÔNG -->
+      <div class="emotional-letter">
+        <p>
+          Trong cái se lạnh của những ngày cuối năm, khi mùa Giáng sinh đang khẽ gõ cửa, cũng là lúc <span
+            class="hl">hành trình 4 năm thanh xuân dưới mái trường Đại học Bách khoa</span> chính thức khép lại.
+        </p>
+        <p>
+          Ngoảnh nhìn lại, mọi thứ dường như chỉ vừa mới hôm qua. Từ ngày đầu tiên bước qua cổng trường Bách khoa, những
+          đêm thức trắng bên bản vẽ cơ khí, những mạch điện tử chập cháy rồi lại cùng nhau sửa chữa, cho đến những tiếng
+          cười vô tư sau mỗi giờ tan học. Tất cả giờ đây đã trở thành những mảnh ký ức chẳng thể nào quên.
+        </p>
+        <p>
+          Bốn năm ấy không chỉ cho tôi kiến thức, mà còn dạy tôi cách trưởng thành, kiên trì và trân trọng những người
+          đã đồng hành trên chặng đường này.
+        </p>
+        <p>
+          <strong>Cầm trên tay tấm bằng Cử nhân</strong>, tôi tự hào vì đã đi đến cuối hành trình, nhưng cũng không khỏi
+          bồi hồi khi một thời thanh xuân tươi đẹp giờ đây chỉ còn là ký ức. Phía sau thành quả hôm nay là sự yêu
+          thương, hy sinh và những tháng ngày âm thầm chờ đợi của gia đình, cùng sự sẻ chia của bạn bè và những người
+          thân yêu.
+        </p>
+        <p>
+          <span class="hl">Sự hiện diện của bố mẹ, gia đình, bạn bè và những người thân yêu trong ngày đặc biệt này sẽ
+            là món quà ý nghĩa nhất đối với tôi.</span> Mong rằng chúng ta sẽ cùng nhau lưu giữ thêm một kỷ niệm đẹp
+          trong dấu mốc đáng nhớ này.
+        </p>
+        <p>
+          Cảm ơn vì đã luôn yêu thương, tin tưởng và đồng hành cùng tôi trên hành trình trưởng thành!
+        </p>
+      </div>
+
+      <!-- ĐỒNG HỒ ĐẾM NGƯỢC -->
+      <div class="countdown-block">
+        <div class="countdown-title">
+          <span>❄️</span> Thời Gian Đến Giờ Cử Hành Hôn Lễ Tốt Nghiệp <span>❄️</span>
+        </div>
+        <div class="countdown-grid">
+          <div class="countdown-item">
+            <div class="countdown-val" id="cdDays">00</div>
+            <div class="countdown-unit">Ngày</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-val" id="cdHours">00</div>
+            <div class="countdown-unit">Giờ</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-val" id="cdMinutes">00</div>
+            <div class="countdown-unit">Phút</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-val" id="cdSeconds">00</div>
+            <div class="countdown-unit">Giây</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THÔNG TIN THỜI GIAN & ĐỊA ĐIỂM -->
+      <div class="event-info-grid">
+        <!-- Thẻ Thời Gian -->
+        <div class="info-card">
+          <div>
+            <div class="card-top">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </div>
+              <div class="card-tag">Thời Gian Đón Tiếp</div>
+            </div>
+            <div class="card-bold">11:00 — Thứ Bảy</div>
+            <div class="card-sub">Ngày 28 tháng 11 năm 2026<br>(Đón tiếp và chụp ảnh lưu niệm cùng tân cử nhân)</div>
+          </div>
+          <a class="card-btn-action" href="#" onclick="addToGoogleCalendar(event)">
+            <span>📅</span> Thêm vào Google Calendar
+          </a>
+        </div>
+
+        <!-- Thẻ Địa Điểm -->
+        <div class="info-card">
+          <div>
+            <div class="card-top">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <div class="card-tag">Địa Điểm Tổ Chức</div>
+            </div>
+            <div class="card-bold">Hội trường A5 — Cơ sở 1</div>
+            <div class="card-sub">
+              Trường Đại học Bách Khoa TP.HCM<br>
+              268 Lý Thường Kiệt, Phường Diên Hồng, TP.HCM<br>
+              Liên hệ: <a href="tel:0385221158" style="color: var(--gold-light); text-decoration: none; font-weight: 600;">0385 221 158</a>
+            </div>
+          </div>
+          <a class="card-btn-action" href="https://maps.google.com/?q=268+Lý+Thường+Kiệt+Phường+14+Quận+10+Hồ+Chí+Minh"
+            target="_blank" rel="noopener">
+            <span>📍</span> Mở chỉ đường Google Maps
+          </a>
+        </div>
+      </div>
+
+      <!-- FOOTER LỜI CHÚC -->
+      <div class="invitation-footer">
+        <div class="footer-quote">
+          "Mong mùa đông này thật ấm áp, và mong được gặp bạn tại giảng đường Bách Khoa!"
+        </div>
+        <div class="footer-badge">
+          Bach Khoa University • Honor • Integrity • Innovation
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- JAVASCRIPT: HIỆU ỨNG TUYẾT RƠI & ÂM NHẠC & MỞ THIỆP -->
+  <script>
+    /* ========================================================
+       CẤU HÌNH MEDIA: background.jpg &amp; Mùa Đông.mp3
+       ======================================================== */
+    const BACKGROUND_IMAGE = 'background.jpg';
+    const bgLayer = document.getElementById('bgCustomLayer');
+    const testImg = new Image();
+    testImg.src = BACKGROUND_IMAGE;
+    testImg.onload = () => {
+      bgLayer.style.backgroundImage = `url('${BACKGROUND_IMAGE}')`;
+      bgLayer.style.opacity = '0.88';
+    };
+
+    /* ========================================================
+       HIỆU ỨNG TUYẾT RƠI VÀ BỤI SAO VÀNG 3D
+       ======================================================== */
+    const canvas = document.getElementById('snowCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let flakes = [];
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Snowflake {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * -height;
+        this.size = Math.random() * 3.5 + 1;
+        this.speedY = Math.random() * 1.2 + 0.6;
+        this.speedX = Math.sin(Math.random() * Math.PI) * 0.8;
+        this.opacity = Math.random() * 0.7 + 0.3;
+        this.isGold = Math.random() > 0.75; // 25% là bụi sao vàng lấp lánh
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += Math.sin(this.y * 0.01) * 0.6;
+        if (this.y > height) {
+          this.y = -10;
+          this.x = Math.random() * width;
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        if (this.isGold) {
+          ctx.fillStyle = `rgba(250, 228, 168, ${this.opacity})`;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = '#d4a74a';
+        } else {
+          ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+          ctx.shadowBlur = 4;
+          ctx.shadowColor = '#ffffff';
+        }
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    for (let i = 0; i < 75; i++) {
+      flakes.push(new Snowflake());
+    }
+
+    function animateSnow() {
+      ctx.clearRect(0, 0, width, height);
+      flakes.forEach(f => {
+        f.update();
+        f.draw();
+      });
+      requestAnimationFrame(animateSnow);
+    }
+    animateSnow();
+
+    /* ========================================================
+       AUDIO ENGINE: PHÁT NHẠC MP3 HOẶC PIANO FALLBACK
+       ======================================================== */
+    const bgmAudio = document.getElementById('bgmAudio');
+    const vinylDisc = document.getElementById('vinylDisc');
+    const musicLabel = document.getElementById('musicLabel');
+    let isPlaying = false;
+    let audioContext = null;
+    let firstInteractionHandled = false;
+
+    function startWebAudioFallback() {
+      if (audioContext) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        audioContext = new AudioCtx();
+        const chords = [
+          [293.66, 369.99, 440.00], // D - F# - A
+          [220.00, 277.18, 329.63], // A - C# - E
+          [246.94, 293.66, 369.99], // B - D - F#
+          [196.00, 246.94, 293.66]  // G - B - D
+        ];
+        let currentStep = 0;
+
+        function playChord(notes) {
+          if (!isPlaying || !audioContext) return;
+          notes.forEach((freq, idx) => {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime + idx * 0.12);
+
+            gain.gain.setValueAtTime(0, audioContext.currentTime);
+            gain.gain.linearRampToValueAtTime(0.045, audioContext.currentTime + idx * 0.12 + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + idx * 0.12 + 2.5);
+
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            osc.start(audioContext.currentTime + idx * 0.12);
+            osc.stop(audioContext.currentTime + idx * 0.12 + 2.6);
+          });
+        }
+
+        playChord(chords[currentStep]);
+        setInterval(() => {
+          if (isPlaying) {
+            currentStep = (currentStep + 1) % chords.length;
+            playChord(chords[currentStep]);
+          }
+        }, 2600);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    function playMusic() {
+      isPlaying = true;
+      vinylDisc.classList.add('spinning');
+      musicLabel.textContent = 'Đang phát nhạc ♫';
+
+      bgmAudio.play().catch(() => {
+        startWebAudioFallback();
+      });
+    }
+
+    function pauseMusic() {
+      isPlaying = false;
+      vinylDisc.classList.remove('spinning');
+      musicLabel.textContent = 'Mùa Đông — Erik';
+      bgmAudio.pause();
+      if (audioContext && audioContext.state === 'running') {
+        audioContext.suspend();
+      }
+    }
+
+    function toggleMusic() {
+      if (isPlaying) {
+        pauseMusic();
+      } else {
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        playMusic();
+      }
+    }
+
+    function enableAutoplayOnLoad() {
+      bgmAudio.muted = true;
+      isPlaying = true;
+      vinylDisc.classList.add('spinning');
+      musicLabel.textContent = 'Đang phát nhạc ♫';
+      bgmAudio.play().then(() => {
+        bgmAudio.muted = false;
+      }).catch(() => {
+        // Trình duyệt di động có thể yêu cầu tương tác đầu tiên.
+      });
+    }
+
+    function enableAudioAfterFirstInteraction() {
+      if (firstInteractionHandled) return;
+      firstInteractionHandled = true;
+      bgmAudio.muted = false;
+      if (!isPlaying) {
+        playMusic();
+      } else {
+        bgmAudio.play().catch(() => startWebAudioFallback());
+      }
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(enableAutoplayOnLoad, 1000);
+    });
+    document.addEventListener('pointerdown', enableAudioAfterFirstInteraction, { once: true });
+    document.addEventListener('touchstart', enableAudioAfterFirstInteraction, { once: true });
+    document.addEventListener('keydown', enableAudioAfterFirstInteraction, { once: true });
+
+    /* ========================================================
+       CÁ NHÂN HÓA THEO URL & MỞ THIỆP
+       ======================================================== */
+    const envelopeScreen = document.getElementById('envelopeScreen');
+    const mainInvitation = document.getElementById('mainInvitation');
+    const envelopeGuestName = document.getElementById('envelopeGuestName');
+    const mainGuestName = document.getElementById('mainGuestName');
+
+    // Đọc tên từ URL: ?to=Tên_Người_Nhận
+    const urlParams = new URLSearchParams(window.location.search);
+    const guestFromUrl = urlParams.get('to');
+    const guestName = guestFromUrl ? decodeURIComponent(guestFromUrl.trim()) : 'Người Bạn Trân Quý';
+
+    envelopeGuestName.textContent = guestName;
+    mainGuestName.textContent = guestName;
+    document.title = `Thiệp Mời Lễ Tốt Nghiệp — Thân gửi ${guestName}`;
+
+    function openInvitationLetter() {
+      playMusic();
+
+      // Bắn pháo hoa tuyết lấp lánh
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 80,
+          spread: 90,
+          origin: { y: 0.6 },
+          colors: ['#ffffff', '#fae4a8', '#d4a74a', '#85b6ff']
+        });
+      }
+
+      envelopeScreen.classList.add('opened');
+      setTimeout(() => {
+        envelopeScreen.style.display = 'none';
+        mainInvitation.classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 850);
+    }
+
+    /* ========================================================
+       ĐỒNG HỒ ĐẾM NGƯỢC TỚI 11:00 NGÀY 28/11/2026
+       ======================================================== */
+    const graduationDate = new Date('2026-11-28T11:00:00+07:00').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = graduationDate - now;
+
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('cdDays').textContent = String(days).padStart(2, '0');
+        document.getElementById('cdHours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
+      } else {
+        document.getElementById('cdDays').textContent = '00';
+        document.getElementById('cdHours').textContent = '00';
+        document.getElementById('cdMinutes').textContent = '00';
+        document.getElementById('cdSeconds').textContent = '00';
+      }
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    /* ========================================================
+       THÊM VÀO GOOGLE CALENDAR
+       ======================================================== */
+    function addToGoogleCalendar(e) {
+      e.preventDefault();
+      const title = encodeURIComponent('Lễ Tốt Nghiệp Cử Nhân Cơ Điện Tử Bách Khoa — 268 Lý Thường Kiệt');
+      const details = encodeURIComponent('Tham dự buổi Lễ Tốt Nghiệp Cử Nhân Cơ Điện Tử, Khoa Cơ Khí, Trường Đại học Bách Khoa TP.HCM');
+      const location = encodeURIComponent('Hội trường A5, 268 Lý Thường Kiệt, Phường Diên Hồng, TP.HCM');
+      const dates = '20261128T040000Z/20261128T070000Z';
+      const calUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&location=${location}`;
+      window.open(calUrl, '_blank');
+    }
+  </script>
+</body>
+
+</html>
